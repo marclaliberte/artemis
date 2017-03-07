@@ -1,0 +1,28 @@
+[webapi]
+# 0.0.0.0 = listen on all interfaces
+host = 0.0.0.0
+port = 8181
+
+[mysql]
+database = Artemis
+user = root
+password = MySQLPassword
+
+[hpfeeds]
+ident = artemis
+secret = Bananas
+host = broker.domain
+port = 20000
+channels = shiva.parsed
+
+[file_log]
+enabled = True
+file = artemis.log
+
+[attachments]
+attachpath = attachments/
+inlinepath = inlines/
+
+[loggly_log]
+enabled = False
+token =
