@@ -60,7 +60,7 @@ class Artemis(object):
         config['mysqluser'] = parser.get('mysql', 'user')
         config['mysqlpass'] = parser.get('mysql', 'password')
 
-        config['hpf_channels'] = parser.get('hpfeeds', 'channels')
+        config['hpf_channels'] = parser.get('hpfeeds', 'channels').split(',')
         config['hpf_ident'] = parser.get('hpfeeds', 'ident')
         config['hpf_secret'] = parser.get('hpfeeds', 'secret')
         config['hpf_port'] = parser.getint('hpfeeds', 'port')

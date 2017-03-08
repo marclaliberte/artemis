@@ -40,7 +40,7 @@ class ThugFiles(object):
         f = '%Y-%m-%d %H:%M:%S'
 
         values = str(now.strftime(f)), str(decode['md5']), str(mdb.escape_string(path)), str(decoded['md5']), '0', '0'
-        insertFile = "INSERT INTO 'thugfiles'('timestamp', 'file_name', 'file_path', 'md5', 'vt_positives', 'vt_total') VALUES(%s, %s, %s, %s, %s, %s)"
+        insertFile = "INSERT INTO `thugfiles`(`timestamp`, `file_name`, `file_path`, `md5`, `vt_positives`, `vt_total`) VALUES(%s, %s, %s, %s, %s, %s)"
 
         try:
             logger.debug('Saving thug file info to database')

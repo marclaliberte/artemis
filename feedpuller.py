@@ -55,6 +55,7 @@ class FeedPuller(object):
                     self.last_received = datetime.now()
                     handler = BaseHandler(ident,self.db_cursor)
                     handler.select_module(chan)
+                    handler.handle_payload(payload)
 
                      # HAND OFF TO PARSED HANDLER
 #                    if not any(x in chan for x in (';', '"', '{', '}')):

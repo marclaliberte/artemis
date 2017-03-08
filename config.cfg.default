@@ -13,7 +13,7 @@ ident = artemis
 secret = Bananas
 host = broker.domain
 port = 20000
-channels = shiva.parsed
+channels = shiva.parsed,thug.files
 
 [file_log]
 enabled = True
