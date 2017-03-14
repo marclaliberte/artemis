@@ -1,3 +1,23 @@
+# Copyright (C) 2017 Marc Laliberte <marc@marclab.net>
+#
+# This code is based on mnemosyne (https://github.com/johnnykv/mnemosyne)
+# by Johnny Vastergaard, copyright 2012.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 #!/usr/bin/env python
 
 
@@ -16,7 +36,7 @@ class ShivaParsed(object):
         self.ident = None
         self.payload = None
 
-    def save_files(record,fileType):
+    def save_files(self,record,fileType):
         i = 0
         while i < len(record[fileType+'File']):
             fileName = str(record['s_id']) + "-a-" + str(record[fileType+'FileName'][i])
@@ -29,35 +49,37 @@ class ShivaParsed(object):
 
             values = str(record['date']), str(record['s_id']), str(record['sensorID']), str(record['from']), str(record['to']), str(record['sourceIP']), str(mdb.escape_string(record[fileType+'FileName'][i])), str(mdb.escape_string(path)), fileType, str(record[fileType+'FileMd5'][i]), '0', '0'
 
-            insertFile = "INSERT INTO 'attachments'('timestamp', 'spam_id', 'sensor_id', 'sender', 'recipient', 'source_ip', 'file_name', 'file_path', 'file_type', 'md5', 'vt_positives', 'vt_total') VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            insertFile = "INSERT INTO `attachments`(`timestamp`, `spam_id`, `sensor_id`, `sender`, `recipient`, `source_ip`, `file_name`, `file_path`, `file_type`, `md5`, `vt_positives`, `vt_total`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 
             try:
                 logger.debug('Saving fattachment info to database')
-                db_cursor.execute(insertFile, values)
+                self.db_cursor.execute(insertFile, values)
                 logger.debug('Attachment info saved to database')
+                i += 1
             except mdb.Error, e:
+                i += 1
                 logger.critical("Error inserting attachment info into MySQL - %d: %s" % (e.args[0], e.args[1]))
 
-    def check_attachments(record):
+    def check_attachments(self,record):
         if len(record['attachmentFile']) > 0:
             logger.debug('Mail record has attachment')
             self.save_files(record,'attachment')
         else:
             logger.debug('Mail record has no attached files')
 
-        if len(reord['inlineFile']) > 0:
+        if len(record['inlineFile']) > 0:
             logger.debug('Mail record has inline file')
             self.save_files(record,'inline')
         else:
             logger.debug('Mail record has no inline files')
 
-    def handle_payload(ident,payload):
+    def handle_payload(self,ident,payload):
         self.ident = ident
-        self.payload = payload
+        self.payload = str(payload)
 
         logger.debug("Unpacking payload")
-        record = cPickle.loads(payload)
+        record = cPickle.loads(self.payload)
 
         logger.debug("Checking payload for attachments")
         self.check_attachments(record)

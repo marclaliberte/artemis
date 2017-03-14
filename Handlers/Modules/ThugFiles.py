@@ -1,3 +1,23 @@
+# Copyright (C) 2017 Marc Laliberte <marc@marclab.net>
+#
+# This code is based on mnemosyne (https://github.com/johnnykv/mnemosyne)
+# by Johnny Vastergaard, copyright 2012.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
 #!/usr/bin/env python
 
 import os
@@ -40,7 +60,7 @@ class ThugFiles(object):
         f = '%Y-%m-%d %H:%M:%S'
 
         values = str(now.strftime(f)), str(decode['md5']), str(mdb.escape_string(path)), str(decoded['md5']), '0', '0'
-        insertFile = "INSERT INTO 'thugfiles'('timestamp', 'file_name', 'file_path', 'md5', 'vt_positives', 'vt_total') VALUES(%s, %s, %s, %s, %s, %s)"
+        insertFile = "INSERT INTO `thugfiles`(`timestamp`, `file_name`, `file_path`, `md5`, `vt_positives`, `vt_total`) VALUES(%s, %s, %s, %s, %s, %s)"
 
         try:
             logger.debug('Saving thug file info to database')
