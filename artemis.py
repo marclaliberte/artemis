@@ -1,4 +1,3 @@
-
 # Copyright (C) 2017 Marc Laliberte <marc@marclab.net>
 #
 # This code is based on mnemosyne (https://github.com/johnnykv/mnemosyne)
@@ -109,61 +108,7 @@ class Artemis(object):
             logger.info("Artemis Storage Server shutting down...")
 
 
-#def parse_config(config_file):
-#    if not os.path.isfile(config_file):
-#        logger.critical("Could not find configuration file: {0}".format(config_file))
-#        sys.exit("Could not find configuration file: {0}".format(config_file))
-
-#    parser = ConfigParser()
-#    parser.read(config_file)
-
-#    config = {}
-
-#    config['mysqldb'] = parser.get('mysql', 'database')
-#    config['mysqluser'] = parser.get('mysql', 'user')
-#    config['mysqlpass'] = parser.get('mysql', 'password')
-
-#    config['hpf_channels'] = parser.get('hpfeeds', 'channels')
-#    config['hpf_ident'] = parser.get('hpfeeds', 'ident')
-#    config['hpf_secret'] = parser.get('hpfeeds', 'secret')
-#    config['hpf_port'] = parser.getint('hpfeeds', 'port')
-#    config['hpf_host'] = parser.get('hpfeeds', 'host')
-
-#    return config
-
 if __name__ == '__main__':
     daemon_runner = runner.DaemonRunner(Artemis())
     daemon_runner.daemon_context.detach_process=True
     daemon_runner.do_action()
-
-#    logfile = 'logs/artemis.log'
-#    config_file = 'config.cfg'
-#    logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-#                        filename=logfile,
-#                        level=logging.DEBUG)
-
-#    c = parse_config(config_file)
-
-#    db_conn = MySQLdb.connect(host="localhost",
-#                         user=c['mysqluser'],
-#                         passwd=c['mysqlpass'],
-#                         db=c['mysqldb'])
-
-#    db_conn.autocommit(True)
-#    db_cursor = db_conn.cursor()
-
-#    logger.info('Starting Artemis Storage')
-
-#    greenlets = {}
-
-#    puller = feedpuller.FeedPuller(db_cursor, c['hpf_ident'], c['hpf_secret'], c['hpf_port'], c['hpf_host'], c['hpf_channels'])
-#    greenlets['hpfeeds-puller'] = gevent.spawn(puller.start_listening)
-
-#    try:
-#        gevent.joinall(greenlets.values())
-#    except KeyboardInterrupt as err:
-#        if puller:
-#            puller.stop()
-#            db_conn.close()
-
-#    gevent.joinall(greenlets.values())
