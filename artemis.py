@@ -55,6 +55,7 @@ class Artemis(object):
 
         config = {}
 
+        config['mysqlserver'] = parser.get('mysql', 'server')
         config['mysqldb'] = parser.get('mysql', 'database')
         config['mysqluser'] = parser.get('mysql', 'user')
         config['mysqlpass'] = parser.get('mysql', 'password')
@@ -78,7 +79,7 @@ class Artemis(object):
                 logger.info("Artemis Storage Server starting up...")
                 c = self.parse_config(self.config_file)
 
-                db_conn = MySQLdb.connect(host="localhost",
+                db_conn = MySQLdb.connect(host=c['mysqlserver'],
                                      user=c['mysqluser'],
                                      passwd=c['mysqlpass'],
                                      db=c['mysqldb'])
