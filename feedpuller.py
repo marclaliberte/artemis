@@ -47,6 +47,7 @@ class FeedPuller(object):
         self.db_cursor = None
 
     def db_connect(self):
+        logger.debug("Connecting to MySQL database")
         db_conn = MySQLdb.conect(host=self.mysqlserver,
                                  user=self.mysqluser,
                                  passwd=self.mysqlpwd,
