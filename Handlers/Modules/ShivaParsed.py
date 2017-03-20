@@ -45,7 +45,7 @@ class ShivaParsed(object):
             attachFile = open(path, 'wb')
             attachFile.write(record[fileType+'File'][i])
             attachFile.close()
-            logger.debug('Attachment file saved')
+            logger.debug('Attachment file saved to volume')
 
             values = str(record['date']), str(record['s_id']), str(record['sensorID']), str(record['from']), str(record['to']), str(record['sourceIP']), str(mdb.escape_string(record[fileType+'FileName'][i])), str(mdb.escape_string(path)), fileType, str(record[fileType+'FileMd5'][i]), '0', '0'
 
@@ -55,7 +55,7 @@ class ShivaParsed(object):
             try:
                 logger.debug('Saving fattachment info to database')
                 self.db_cursor.execute(insertFile, values)
-                logger.debug('Attachment info saved to database')
+                logger.info('Attachment info saved to database')
                 i += 1
             except mdb.Error, e:
                 i += 1
@@ -63,7 +63,7 @@ class ShivaParsed(object):
 
     def check_attachments(self,record):
         if len(record['attachmentFile']) > 0:
-            logger.debug('Mail record has attachment')
+            logger.debug('Mail record has attachment, processing...')
             self.save_files(record,'attachment')
         else:
             logger.debug('Mail record has no attached files')
@@ -72,13 +72,13 @@ class ShivaParsed(object):
             logger.debug('Mail record has inline file')
             self.save_files(record,'inline')
         else:
-            logger.debug('Mail record has no inline files')
+            logger.debug('Mail record has no inline files, processing...')
 
     def handle_payload(self,ident,payload):
         self.ident = ident
         self.payload = str(payload)
 
-        logger.debug("Unpacking payload")
+        logger.debug("Unpacking hpfeeds payload")
         record = cPickle.loads(self.payload)
 
         logger.debug("Checking payload for attachments")
