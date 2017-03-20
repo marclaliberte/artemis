@@ -143,18 +143,9 @@ class Artemis(object):
 
                 self.init_db(c)
 
-                db_conn = MySQLdb.connect(host=c['mysqlserver'],
-                                     user=c['mysqluser'],
-                                     passwd=c['mysqlpass'],
-                                     db=c['mysqldb'])
-
-                db_conn.autocommit(True)
-                db_cursor = db_conn.cursor()
-
-
                 greenlets = {}
 
-                puller = feedpuller.FeedPuller(db_cursor, c['hpf_ident'], c['hpf_secret'], c['hpf_port'], c['hpf_host'], c['hpf_channels'])
+                puller = feedpuller.FeedPuller(c)
                 greenlets['hpfeeds-puller'] = gevent.spawn(puller.start_listening)
 
                 try:

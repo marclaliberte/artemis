@@ -29,18 +29,31 @@ logger = logging.getLogger('artemis')
 
 
 class FeedPuller(object):
-    def __init__(self, db_cursor, ident, secret, port, host, feeds):
+    def __init__(self, config):
 
-        self.db_cursor = db_cursor
-
-        self.ident = ident
-        self.secret = secret
-        self.port = port
-        self.host = host
-        self.feeds = feeds
+        self.mysqlserver = config['mysqlserver']
+        self.mysqluser = config['mysqluser']
+        self.mysqlpwd = config['mysqlpass']
+        self.mysqldb = config['mysqldb']
+        self.ident = config['hpf_ident']
+        self.secret = config['hpf_secret']
+        self.port = config['hpf_port']
+        self.host = config['hpf_host']
+        self.feeds = config['hpf_channels']
         self.last_received = datetime.now()
+
         self.hpc = None
         self.enabled = True
+        self.db_cursor = None
+
+    def db_connect(self):
+        db_conn = MySQLdb.conect(host=self.mysqlserver,
+                                 user=self.mysqluser,
+                                 passwd=self.mysqlpwd,
+                                 db=self.mysqldb)
+
+        db_conn.autocommit(True)
+        return db_conn
 
     def start_listening(self):
 
@@ -55,13 +68,15 @@ class FeedPuller(object):
 
                 def on_message(ident, chan, payload):
                     self.last_received = datetime.now()
-                    handler = BaseHandler(ident,self.db_cursor)
+                    db_conn = self.db_connect()
+                    db_cursor = db_conn.cursor()
+
+                    handler = BaseHandler(ident,db_cursor)
                     handler.select_module(chan)
                     handler.handle_payload(payload)
 
-                     # HAND OFF TO PARSED HANDLER
-#                    if not any(x in chan for x in (';', '"', '{', '}')):
-#                        self.database.insert_hpfeed(ident, chan, payload)
+                    db_conn.close()
+                    
 
                 self.hpc.subscribe(self.feeds)
                 self.hpc.run(on_message, on_error)
