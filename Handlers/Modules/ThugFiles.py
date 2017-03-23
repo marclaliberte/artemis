@@ -68,7 +68,7 @@ class ThugFiles(object):
         except mdb.Error, e:
             logger.critical("Error inserting file info into MySQL - %d: %s" % (e.args[0], e.args[1]))
 
-    def handle_payload(ident,payload):
+    def handle_payload(self,ident,payload):
         self.ident = ident
         self.payload = payload
 

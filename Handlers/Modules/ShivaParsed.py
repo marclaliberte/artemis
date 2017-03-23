@@ -69,10 +69,10 @@ class ShivaParsed(object):
             logger.debug('Mail record has no attached files')
 
         if len(record['inlineFile']) > 0:
-            logger.debug('Mail record has inline file')
+            logger.debug('Mail record has inline file, processing...')
             self.save_files(record,'inline')
         else:
-            logger.debug('Mail record has no inline files, processing...')
+            logger.debug('Mail record has no inline files')
 
     def handle_payload(self,ident,payload):
         self.ident = ident
