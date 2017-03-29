@@ -28,9 +28,10 @@ logger = logging.getLogger('artemis')
 
 class BaseHandler(object):
 
-    def __init__(self,ident,db_cursor):
+    def __init__(self,ident,db_cursor,config):
         self.ident = ident
         self.db_cursor = db_cursor
+        self.config = config
         self.chan = None
         self.module = None
         self.payload = None
@@ -38,10 +39,10 @@ class BaseHandler(object):
     def select_module(self,chan):
         self.chan = str(chan)
         if self.chan == 'shiva.parsed':
-            self.module = ShivaParsed(self.db_cursor)
+            self.module = ShivaParsed(self.db_cursor,self.config)
             logger.info('Identified channel as {0}'.format(self.chan))
         elif self.chan == 'thug.files':
-            self.module = ThugFiles(self.db_cursor)
+            self.module = ThugFiles(self.db_cursor,self.config)
             logger.info('Identified channel as {0}'.format(self.chan))
         else:
             logger.info('Could not identify channel {0}'.format(self.chan))

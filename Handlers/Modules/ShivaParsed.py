@@ -26,21 +26,36 @@ import sys
 import logging
 import MySQLdb as mdb
 import cPickle
+from VTHandler import VTHandler
 
 logger = logging.getLogger('artemis')
 
 class ShivaParsed(object):
 
-    def __init__(self,db_cursor):
+    def __init__(self,db_cursor,config):
         self.db_cursor = db_cursor
         self.ident = None
         self.payload = None
+        self.config = config
 
     def save_files(self,record,fileType):
         i = 0
         while i < len(record[fileType+'File']):
             fileName = str(record['s_id']) + "-a-" + str(record[fileType+'FileName'][i])
             path = "/var/artemis/files/" + fileType + "/" + fileName
+
+            logger.debug("Checking if file already exists: %s" % str(record[fileType+'FileMd5'][i]))
+            md5 = (str(record[fileType+'FileMd5'][i]),)
+            checkFile = "SELECT COUNT(1) FROM `attachments` WHERE `md5` = %s"
+            try:
+                self.db_cursor.execute(checkFile, md5)
+                if (self.db_cursor.fetchone()[0]):
+                    logger.info("File already exists, skipping")
+                    i += 1
+                    continue
+            except mdb.Error, e:
+                logger.critical("Error checking attachment database - %d: %s" % (e.args[0], e.args[1]))
+
             logger.debug('Saving attachment file')
             attachFile = open(path, 'wb')
             attachFile.write(record[fileType+'File'][i])
@@ -60,6 +75,10 @@ class ShivaParsed(object):
             except mdb.Error, e:
                 i += 1
                 logger.critical("Error inserting attachment info into MySQL - %d: %s" % (e.args[0], e.args[1]))
+
+            if (self.config['vt_enabled'] == 'True'):
+                vtHandler = VTHandler(self.config['vt_api_key'],self.db_cursor,'attachments')
+                vtHandler.new_file(path)
 
     def check_attachments(self,record):
         if len(record['attachmentFile']) > 0:
