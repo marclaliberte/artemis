@@ -66,6 +66,10 @@ class Artemis(object):
         config['hpf_port'] = parser.getint('hpfeeds', 'port')
         config['hpf_host'] = parser.get('hpfeeds', 'host')
 
+        config['vt_enabled'] = parser.get('virus_total','enabled')
+        config['vt_api_key'] = parser.get('virus_total', 'apikey')
+
+
         return config
 
     def init_db(self,c):

@@ -27,3 +27,7 @@ inlinepath = inlines/
 [loggly_log]
 enabled = False
 token =
+
+[virus_total]
+enabled = False
+apikey = 
