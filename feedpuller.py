@@ -31,6 +31,7 @@ logger = logging.getLogger('artemis')
 class FeedPuller(object):
     def __init__(self, config):
 
+        self.config = config
         self.mysqlserver = config['mysqlserver']
         self.mysqluser = config['mysqluser']
         self.mysqlpwd = config['mysqlpass']
@@ -40,6 +41,7 @@ class FeedPuller(object):
         self.port = config['hpf_port']
         self.host = config['hpf_host']
         self.feeds = config['hpf_channels']
+        self.vt_api_key = config['vt_api_key']
         self.last_received = datetime.now()
 
         self.hpc = None
@@ -72,7 +74,7 @@ class FeedPuller(object):
                     db_conn = self.db_connect()
                     db_cursor = db_conn.cursor()
 
-                    handler = BaseHandler(ident,db_cursor)
+                    handler = BaseHandler(ident,db_cursor,self.config)
                     handler.select_module(chan)
                     handler.handle_payload(payload)
 

@@ -1,2 +1,3 @@
-__all__ = [ 'ShivaParsed'
+__all__ = [ 'ShivaParsed',
+            'ThugFiles'
           ]
