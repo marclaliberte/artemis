@@ -64,7 +64,7 @@ class ShivaParsed(object):
 
             values = str(record['date']), str(record['s_id']), str(record['sensorID']), str(record['from']), str(record['to']), str(record['sourceIP']), str(mdb.escape_string(record[fileType+'FileName'][i])), str(mdb.escape_string(path)), fileType, str(record[fileType+'FileMd5'][i]), '0', '0'
 
-            insertFile = "INSERT INTO `attachments`(`timestamp`, `spam_id`, `sensor_id`, `sender`, `recipient`, `source_ip`, `file_name`, `file_path`, `file_type`, `md5`, `vt_positives`, `vt_total`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            insertFile = "INSERT INTO `attachments`(`timestamp`, `spam_id`, `sensor_id`, `sender`, `source_ip`, `file_name`, `file_path`, `file_type`, `md5`, `vt_positives`, `vt_total`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 
             try:
