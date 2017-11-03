@@ -21,7 +21,7 @@
 #!/usr/bin/env python
 
 import logging
-from Modules.ShivaParsed import ShivaParsed
+from Modules.ArtemisParsed import ArtemisParsed
 from Modules.ThugFiles import ThugFiles
 
 logger = logging.getLogger('artemis')
@@ -38,7 +38,7 @@ class BaseHandler(object):
 
     def select_module(self,chan):
         self.chan = str(chan)
-        if self.chan == 'shiva.parsed':
+        if self.chan == 'artemis.parsed':
             self.module = ShivaParsed(self.db_cursor,self.config)
             logger.info('Identified channel as {0}'.format(self.chan))
         elif self.chan == 'thug.files':
